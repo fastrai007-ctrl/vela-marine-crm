@@ -15,18 +15,27 @@ const NAV = [
 ];
 
 interface SidebarProps {
+  isMobile?: boolean;
   mobileOpen?: boolean;
   onClose?: () => void;
 }
 
-export function Sidebar({ mobileOpen = false, onClose }: SidebarProps) {
+export function Sidebar({ isMobile = false, mobileOpen = false, onClose }: SidebarProps) {
   const pathname = usePathname();
+
+  const transform = isMobile ? (mobileOpen ? "translateX(0)" : "translateX(-100%)") : "translateX(0)";
 
   return (
     <aside
-      className={`sidebar-drawer fixed left-0 top-0 h-screen flex flex-col z-40${mobileOpen ? " sidebar-open" : ""}`}
       style={{
+        position: "fixed",
+        top: 0, left: 0, bottom: 0,
         width: "var(--sidebar-width)",
+        zIndex: 40,
+        display: "flex",
+        flexDirection: "column",
+        transform,
+        transition: "transform 300ms cubic-bezier(.16,1,.3,1)",
         background: "rgba(4,4,6,0.96)",
         backdropFilter: "blur(32px)",
         WebkitBackdropFilter: "blur(32px)",
@@ -34,71 +43,43 @@ export function Sidebar({ mobileOpen = false, onClose }: SidebarProps) {
       }}
     >
       {/* Brand */}
-      <div className="px-5 pt-8 pb-7 relative" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
-        {/* Mobile close button */}
-        <button
-          className="md:hidden absolute top-4 right-4 p-1.5"
-          style={{ color: "rgba(255,255,255,0.4)", background: "none", border: "none", cursor: "pointer" }}
-          onClick={onClose}
-        >
-          <X size={16} />
-        </button>
-
-        <div className="flex flex-col items-start gap-1">
-          <span
-            className="font-serif text-white leading-none select-none"
-            style={{
-              fontFamily: "'Cormorant Garamond', Georgia, serif",
-              fontStyle: "italic",
-              fontWeight: 500,
-              fontSize: "2.1rem",
-              letterSpacing: "-0.02em",
-              lineHeight: 1,
-            }}
+      <div style={{ padding: "32px 20px 28px", borderBottom: "1px solid rgba(255,255,255,0.04)", position: "relative" }}>
+        {isMobile && (
+          <button
+            onClick={onClose}
+            style={{ position: "absolute", top: 12, right: 12, padding: 6, color: "rgba(255,255,255,0.4)", background: "none", border: "none", cursor: "pointer" }}
           >
-            M
-          </span>
-          <span
-            className="text-white uppercase tracking-widest"
-            style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontWeight: 300,
-              fontSize: "0.6rem",
-              letterSpacing: "0.35em",
-              opacity: 0.85,
-            }}
-          >
-            Vela Marine Group
-          </span>
-          <span
-            className="text-white uppercase"
-            style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontWeight: 300,
-              fontSize: "0.55rem",
-              letterSpacing: "0.25em",
-              opacity: 0.35,
-            }}
-          >
-            CRM · Demo
-          </span>
+            <X size={16} />
+          </button>
+        )}
+        <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+          <span style={{
+            fontFamily: "'Cormorant Garamond', Georgia, serif",
+            fontStyle: "italic", fontWeight: 500,
+            fontSize: "2.1rem", letterSpacing: "-0.02em", lineHeight: 1,
+            color: "white",
+          }}>M</span>
+          <span style={{
+            fontFamily: "'DM Sans', sans-serif", fontWeight: 300,
+            fontSize: "0.6rem", letterSpacing: "0.35em",
+            color: "rgba(255,255,255,0.85)", textTransform: "uppercase",
+          }}>Vela Marine Group</span>
+          <span style={{
+            fontFamily: "'DM Sans', sans-serif", fontWeight: 300,
+            fontSize: "0.55rem", letterSpacing: "0.25em",
+            color: "rgba(255,255,255,0.35)", textTransform: "uppercase",
+          }}>CRM · Demo</span>
         </div>
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 px-3 py-5 space-y-0.5">
-        <p
-          className="px-2 pb-3 uppercase"
-          style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontWeight: 500,
-            fontSize: "0.6rem",
-            letterSpacing: "0.18em",
-            color: "rgba(255,255,255,0.2)",
-          }}
-        >
-          Navigation
-        </p>
+      <nav style={{ flex: 1, padding: "20px 12px" }}>
+        <p style={{
+          padding: "0 8px", paddingBottom: 12, margin: 0,
+          fontFamily: "'DM Sans', sans-serif", fontWeight: 500,
+          fontSize: "0.6rem", letterSpacing: "0.18em",
+          color: "rgba(255,255,255,0.2)", textTransform: "uppercase",
+        }}>Navigation</p>
         {NAV.map(({ href, icon: Icon, label }) => {
           const active = pathname === href || pathname.startsWith(href + "/");
           return (
@@ -106,12 +87,14 @@ export function Sidebar({ mobileOpen = false, onClose }: SidebarProps) {
               key={href}
               href={href}
               onClick={onClose}
-              className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm transition-all duration-150"
               style={{
+                display: "flex", alignItems: "center", gap: 10,
+                padding: "10px 12px", borderRadius: 12, marginBottom: 2,
+                fontSize: 14, fontWeight: active ? 500 : 400, textDecoration: "none",
+                transition: "all 150ms ease",
                 color: active ? "#fff" : "rgba(255,255,255,0.4)",
                 background: active ? "rgba(255,255,255,0.07)" : "transparent",
                 fontFamily: "'DM Sans', sans-serif",
-                fontWeight: active ? 500 : 400,
                 letterSpacing: "0.01em",
               }}
             >
@@ -123,22 +106,13 @@ export function Sidebar({ mobileOpen = false, onClose }: SidebarProps) {
       </nav>
 
       {/* Footer */}
-      <div
-        className="px-5 py-4"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}
-      >
-        <p
-          className="uppercase"
-          style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontWeight: 300,
-            fontSize: "0.55rem",
-            letterSpacing: "0.2em",
-            color: "rgba(255,255,255,0.2)",
-          }}
-        >
-          Powered by FASTR AI
-        </p>
+      <div style={{ padding: "16px 20px", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
+        <p style={{
+          margin: 0,
+          fontFamily: "'DM Sans', sans-serif", fontWeight: 300,
+          fontSize: "0.55rem", letterSpacing: "0.2em",
+          color: "rgba(255,255,255,0.2)", textTransform: "uppercase",
+        }}>Powered by FASTR AI</p>
       </div>
     </aside>
   );
