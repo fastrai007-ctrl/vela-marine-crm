@@ -218,7 +218,7 @@ export function VesselBoard({ clients }: { clients: ClientWithVessels[] }) {
 
       {/* ── ADD/EDIT CLIENT MODAL ── */}
       {editClient !== null && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4">
+        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/60 backdrop-blur-md px-4 py-14">
           <div className="glass-modal w-full max-w-md p-6 space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="font-semibold text-white">{editClient.id ? "Edit Client" : "New Client"}</h3>
@@ -270,7 +270,7 @@ export function VesselBoard({ clients }: { clients: ClientWithVessels[] }) {
 
       {/* ── ADD/EDIT VESSEL MODAL ── */}
       {(addVesselToClient || editVessel) && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4">
+        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/60 backdrop-blur-md px-4 py-14">
           <div className="glass-modal w-full max-w-md p-6 space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="font-semibold text-white">{editVessel ? "Edit Vessel" : "Add Vessel"}</h3>
@@ -312,7 +312,7 @@ export function VesselBoard({ clients }: { clients: ClientWithVessels[] }) {
 
       {/* ── ADD SHOOT MODAL ── */}
       {addShootToVessel && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4">
+        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/60 backdrop-blur-md px-4 py-14">
           <div className="glass-modal w-full max-w-md p-6 space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="font-semibold text-white">Book Shoot</h3>

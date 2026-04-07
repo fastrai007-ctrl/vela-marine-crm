@@ -81,7 +81,7 @@ export function MarineLeadsBoard({ leads }: { leads: Lead[] }) {
 
       {/* Add Lead Modal */}
       {showForm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4">
+        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/60 backdrop-blur-md px-4 py-14">
           <div className="glass-modal w-full max-w-md p-6 space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="font-semibold text-white">New Lead</h3>
@@ -121,7 +121,7 @@ export function MarineLeadsBoard({ leads }: { leads: Lead[] }) {
 
       {/* Detail Modal */}
       {selected && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4">
+        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/60 backdrop-blur-md px-4 py-14">
           <div className="glass-modal w-full max-w-sm p-6 space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="font-semibold text-white">{selected.name}</h3>
