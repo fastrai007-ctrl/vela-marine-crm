@@ -1,0 +1,107 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Client {
+  id           String   @id @default(cuid())
+  companyName  String
+  contactName  String
+  email        String
+  phone        String?
+  clientType   String   @default("VESSEL_OWNER") // BROKER | VESSEL_OWNER | CHARTER_OP
+  stage        String   @default("LEAD")          // LEAD | ACTIVE | REPEAT | INACTIVE
+  location     String?
+  notes        String?
+  monthlyValue Int?
+  vessels      Vessel[]
+  leads        Lead[]
+  createdAt    DateTime @default(now())
+
+  @@map("vm_clients")
+}
+
+model Vessel {
+  id            String   @id @default(cuid())
+  name          String
+  vesselType    String   @default("MOTOR_YACHT") // MOTOR_YACHT | SAILING | CATAMARAN | SUPERYACHT | SPORTFISH
+  lengthM       Float?
+  listingPrice  Int?
+  marina        String?
+  listingStatus String   @default("PRIVATE") // FOR_SALE | CHARTER | PRIVATE | SOLD
+  clientId      String
+  client        Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  shoots        Shoot[]
+  createdAt     DateTime @default(now())
+
+  @@map("vm_vessels")
+}
+
+model Shoot {
+  id           String             @id @default(cuid())
+  vesselId     String
+  vessel       Vessel             @relation(fields: [vesselId], references: [id], onDelete: Cascade)
+  shootDate    DateTime?
+  location     String?
+  weatherNotes String?
+  services     String             @default("PHOTO")   // comma-sep: PHOTO,VIDEO,REEL,VIRTUAL_TOUR
+  status       String             @default("ENQUIRY") // ENQUIRY | BOOKED | COMPLETED | DELIVERED
+  budget       Int?
+  notes        String?
+  deliverables ShootDeliverable[]
+  createdAt    DateTime           @default(now())
+
+  @@map("vm_shoots")
+}
+
+model ShootDeliverable {
+  id        String    @id @default(cuid())
+  shootId   String
+  shoot     Shoot     @relation(fields: [shootId], references: [id], onDelete: Cascade)
+  type      String    @default("PHOTO") // PHOTO | VIDEO | REEL | VIRTUAL_TOUR
+  title     String
+  link      String?
+  completed Boolean   @default(false)
+  dueDate   DateTime?
+  createdAt DateTime  @default(now())
+
+  @@map("vm_shoot_deliverables")
+}
+
+model Lead {
+  id                 String    @id @default(cuid())
+  name               String
+  email              String?
+  phone              String?
+  vesselName         String?
+  vesselType         String?
+  location           String?
+  servicesInterested String?
+  budget             String?
+  timeline           String?
+  stage              String    @default("NEW") // NEW | CONTACTED | QUOTED | BOOKED | LOST
+  notes              String?
+  source             String?
+  clientId           String?
+  client             Client?   @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  createdAt          DateTime  @default(now())
+
+  @@map("vm_leads")
+}
+
+model Expense {
+  id        String   @id @default(cuid())
+  title     String
+  amount    Int
+  purpose   String?
+  month     String
+  createdAt DateTime @default(now())
+
+  @@map("vm_expenses")
+}
