@@ -2,13 +2,16 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Anchor, Users, CalendarDays, BarChart2, Inbox } from "lucide-react";
+import { Anchor, CalendarDays, BarChart2, Inbox, Calendar, Bot, Settings } from "lucide-react";
 
 const NAV = [
   { href: "/vessels",    icon: Anchor,        label: "Vessels" },
   { href: "/bookings",   icon: CalendarDays,  label: "Bookings" },
   { href: "/leads",      icon: Inbox,         label: "Leads" },
   { href: "/financials", icon: BarChart2,     label: "Financials" },
+  { href: "/calendar",   icon: Calendar,      label: "Calendar" },
+  { href: "/agent",      icon: Bot,           label: "Agent" },
+  { href: "/settings",   icon: Settings,      label: "Settings" },
 ];
 
 export function Sidebar() {

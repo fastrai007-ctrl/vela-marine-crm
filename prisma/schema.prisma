@@ -105,3 +105,32 @@ model Expense {
 
   @@map("vm_expenses")
 }
+
+model AgentConversation {
+  id        String   @id @default(cuid())
+  sessionId String
+  role      String
+  content   String
+  createdAt DateTime @default(now())
+
+  @@index([sessionId, createdAt])
+  @@map("vm_agent_conversations")
+}
+
+model AgentMemory {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  updatedAt DateTime @updatedAt
+
+  @@map("vm_agent_memory")
+}
+
+model Setting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  updatedAt DateTime @updatedAt
+
+  @@map("vm_settings")
+}
